@@ -43,8 +43,6 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
         val layoutBoolean = settings?.getBoolean("gridCheckbox", false)
         val showBoolean = settings?.getBoolean("showCheckbox", false)
-//        Log.d("Show BOOLEAN", showBoolean.toString())
-//        Log.d("Layout BOOLEAN", layoutBoolean.toString())
 
 
         if(layoutBoolean == true){
@@ -81,7 +79,6 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         mUserViewModel.update(ListAdapter().userList)
         super.onDestroy()
     }
-
 
 
 

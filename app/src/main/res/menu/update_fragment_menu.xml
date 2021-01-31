@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/menu_delete_note"
         android:title="@string/delete"
@@ -10,8 +9,14 @@
         app:showAsAction="always"/>
 
     <item android:id="@+id/menu_share"
-        android:title="Share note!"
+        android:title="@string/share_note"
         android:icon="@drawable/ic_share"
         app:showAsAction="always"/>
+
+    <item android:id="@+id/menu_notification"
+        android:title="@string/notification"
+        android:icon="@drawable/ic_notification"
+        app:showAsAction="ifRoom"
+        />
 
 </menu>

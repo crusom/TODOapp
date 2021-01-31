@@ -1,6 +1,5 @@
 package com.example.todoapp
 
-
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -8,10 +7,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.todoapp.databinding.ActivityMainBinding
 
 
-open class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity(){
 
     private lateinit var binding: ActivityMainBinding
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +18,7 @@ open class MainActivity : AppCompatActivity(){
 
         setupActionBarWithNavController(findNavController(R.id.fragment))
     }
+
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.fragment)

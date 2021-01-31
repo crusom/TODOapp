@@ -9,4 +9,11 @@
     <string name="update">Update</string>
     <string name="description">Description</string>
     <string name="subject">Subject</string>
+    <string name="ok">OK</string>
+
+    <string name="note_notification_channel_id" translatable="false">note_channel</string>
+    <string name="note_notification_channel_name" translatable="false">Note</string>
+    <string name="note_notification_channel_description" translatable="false">Remind about some note</string>
+    <string name="share_note">Share note!</string>
+    <string name="notification">Notification</string>
 </resources>
