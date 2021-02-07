@@ -16,4 +16,7 @@
     <string name="note_notification_channel_description" translatable="false">Remind about some note</string>
     <string name="share_note">Share note!</string>
     <string name="notification">Notification</string>
+    <string name="date">Date</string>
+    <string name="some_awesome_note_description_bla_bla_bla_bla">Some awesome note description bla bla bla bla</string>
+    <string name="notification_icon">Notification icon</string>
 </resources>
