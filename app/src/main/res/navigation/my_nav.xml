@@ -16,8 +16,8 @@
             android:id="@+id/action_listFragment_to_updateFragment"
             app:destination="@id/updateFragment" />
         <argument
-            android:name="currentUser"
-            app:argType="com.example.todoapp.model.User" />
+            android:name="currentNote"
+            app:argType="com.example.todoapp.model.Note" />
     </fragment>
     <fragment
         android:id="@+id/addFragment"
@@ -36,7 +36,7 @@
             android:id="@+id/action_updateFragment_to_listFragment"
             app:destination="@id/listFragment" />
         <argument
-            android:name="currentUser"
-            app:argType="com.example.todoapp.model.User" />
+            android:name="currentNote"
+            app:argType="com.example.todoapp.model.Note" />
     </fragment>
 </navigation>

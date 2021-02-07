@@ -21,16 +21,7 @@ class MyDatePickerDialog : DialogFragment {
         val year: Int = c.get(Calendar.YEAR)
         val month: Int = c.get(Calendar.MONTH)
         val dayOfMonth: Int = c.get(Calendar.DAY_OF_MONTH)
-//        val datePicker = DatePickerDialog(requireActivity(), onDateSetListener, year, month, dayOfMonth)
 
-//        datePicker.window?.setLayout(WindowManager.LayoutParams.WRAP_CONTENT,
-//                WindowManager.LayoutParams.WRAP_CONTENT);
-//        datePicker.window?.setGravity(Gravity.CENTER);
-////        val buttonPositive = datePicker.getButton(DialogInterface.BUTTON_POSITIVE)
-////        buttonPositive.width = 123
-////        buttonPositive.height = 100
-////        buttonPositive.textSize = 30F
         return DatePickerDialog(requireActivity(), onDateSetListener, year, month, dayOfMonth)
-
     }
 }

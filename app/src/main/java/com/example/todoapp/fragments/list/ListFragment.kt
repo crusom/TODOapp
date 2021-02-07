@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
@@ -16,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentListBinding
-import com.example.todoapp.viewmodel.UserViewModel
+import com.example.todoapp.viewmodel.NoteViewModel
 
 
 class ListFragment : Fragment(), SearchView.OnQueryTextListener {
@@ -26,7 +25,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         get() = _binding!!
 
 
-    private val mUserViewModel: UserViewModel by viewModels()
+    private val mNoteViewModel: NoteViewModel by viewModels()
     private val adapter = ListAdapter()
     lateinit var recyclerView: RecyclerView
 
@@ -38,25 +37,27 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         _binding = FragmentListBinding.inflate(layoutInflater, container, false)
         val settings: SharedPreferences? = activity?.getSharedPreferences("settings", 0)
 
+
         recyclerView = binding.recyclerview
         recyclerView.adapter = adapter
+        recyclerView.setHasFixedSize(true)
 
         val layoutBoolean = settings?.getBoolean("gridCheckbox", false)
         val showBoolean = settings?.getBoolean("showCheckbox", false)
 
 
         if(layoutBoolean == true){
-            recyclerView.layoutManager = StaggeredGridLayoutManager(2,LinearLayoutManager.VERTICAL)
+            recyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         }
         else{
-            recyclerView.layoutManager = StaggeredGridLayoutManager(1,LinearLayoutManager.VERTICAL)
+            recyclerView.layoutManager = StaggeredGridLayoutManager(1, LinearLayoutManager.VERTICAL)
         }
 
         adapter.showItems = showBoolean == true
 
 
-        mUserViewModel.readAllData.observe(viewLifecycleOwner, { user ->
-            adapter.setData(user)
+        mNoteViewModel.readAllData.observe(viewLifecycleOwner, { note ->
+            adapter.setData(note)
         })
 
         binding.floatingActionButton.setOnClickListener{
@@ -65,18 +66,18 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
         setHasOptionsMenu(true)
 
-        adapter.setRecyclerViewItemTouchListener(recyclerView, mUserViewModel)
+        adapter.setRecyclerViewItemTouchListener(recyclerView)
         return binding.root
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-
     override fun onDestroy() {
-        mUserViewModel.update(ListAdapter().userList)
+        mNoteViewModel.update(adapter.noteList)
         super.onDestroy()
     }
 
@@ -100,6 +101,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
                 adapter.showItems = true
                 item.isChecked = true
             }
+
             editor?.putBoolean("showCheckbox", item.isChecked)
             editor?.apply()
             adapter.notifyDataSetChanged()
@@ -109,11 +111,11 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
         if(item.itemId == R.id.menu_change_layout){
             if(item.isChecked){
-                recyclerView.layoutManager = StaggeredGridLayoutManager(1,LinearLayoutManager.VERTICAL)
+                recyclerView.layoutManager = StaggeredGridLayoutManager(1, LinearLayoutManager.VERTICAL)
                 item.isChecked = false
             }
             else{
-                recyclerView.layoutManager = StaggeredGridLayoutManager(2,LinearLayoutManager.VERTICAL)
+                recyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
                 item.isChecked = true
             }
             editor?.putBoolean("gridCheckbox", item.isChecked)
@@ -129,7 +131,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     private fun deleteAllNotes(){
         val builder = AlertDialog.Builder(requireContext())
         builder.setPositiveButton("Yes"){ _, _->
-            mUserViewModel.deleteAllUsers()
+            mNoteViewModel.deleteAllNotes()
             Toast.makeText(requireContext(), "Successfully removed", Toast.LENGTH_SHORT).show()
         }
         builder.setNegativeButton("No"){ _, _-> }
@@ -143,7 +145,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     @SuppressLint("ResourceType")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.list_fragment_menu, menu)
-        //Checkbox
+        //Checkboxes
         val settings = activity?.getSharedPreferences("settings", 0)
 
         val isShowChecked = settings?.getBoolean("showCheckbox", false)
@@ -159,7 +161,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         if(isChangeLayoutChecked != null) {
             itemChangeLayout.isChecked = isChangeLayoutChecked
         }
-        //Search
+        //SearchView
         val search = menu.findItem(R.id.menu_search)
         val searchView = search?.actionView as SearchView
 
@@ -172,7 +174,6 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
 
     override fun onQueryTextSubmit(query: String): Boolean {
-        searchDatabase(query)
         return true
     }
 
@@ -183,13 +184,15 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun searchDatabase(query: String) {
         val searchQuery = "%$query%"
-        mUserViewModel.searchDatabase(searchQuery).observe(viewLifecycleOwner, { list ->
+        mNoteViewModel.searchDatabase(searchQuery).observe(viewLifecycleOwner, { list ->
             list.let {
-                Log.d("SEARCH", it.toString())
+//                Log.d("SEARCH", it.toString())
                 adapter.setData(it)
             }
         })
     }
+
+
 
 }
 

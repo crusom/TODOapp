@@ -1,73 +1,67 @@
 package com.example.todoapp.fragments.add
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.text.TextUtils
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
-import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentAddBinding
-import com.example.todoapp.model.User
-import com.example.todoapp.viewmodel.UserViewModel
+import com.example.todoapp.model.Note
+import com.example.todoapp.viewmodel.NoteViewModel
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+
 class AddFragment : Fragment() {
 
-    private lateinit var mUserViewModel: UserViewModel
+    private lateinit var mNoteViewModel: NoteViewModel
     private var _binding: FragmentAddBinding? = null
     private val binding
         get() = _binding!!
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?,
     ): View {
 
         _binding = FragmentAddBinding.inflate(layoutInflater, container, false)
 
-        mUserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        mNoteViewModel = ViewModelProvider(this).get(NoteViewModel::class.java)
 
-        binding.addButton.setOnClickListener {
-            insertDataToDatabase()
-        }
+
+        activity?.window?.setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+        setHasOptionsMenu(true)
 
         return binding.root
     }
 
     override fun onDestroyView() {
+        insertDataToDatabase()
         super.onDestroyView()
         _binding = null
     }
+
+
 
 
     private fun insertDataToDatabase() {
         val subject = binding.addSubjectEt.text.toString()
         val description = binding.addDescriptionEt.text.toString()
 
-        if(inputCheck(subject, description)){
-            val currentTime = LocalDateTime.now()
+        if(subject != "" || description != ""){
+        val currentTime = LocalDateTime.now()
 
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-            val formattedDate = currentTime.format(formatter)
-            val user = User(0, subject, description, formattedDate)
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val formattedDate = currentTime.format(formatter)
+        val note = Note(0, subject, description, formattedDate, null, null)
 
-            mUserViewModel.addUser(user)
-            Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG).show()
-            findNavController().navigate(R.id.action_addFragment_to_listFragment)
-        }
-        else{
-            Toast.makeText(requireContext(), "Please fill out all fields", Toast.LENGTH_LONG).show()
+        mNoteViewModel.addNote(note)
+        Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG).show()
         }
 
-    }
-
-    private fun inputCheck(subject: String, description: String): Boolean{
-        return !TextUtils.isEmpty(subject) && !TextUtils.isEmpty(description)
     }
 
 }

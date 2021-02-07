@@ -1,32 +1,34 @@
 package com.example.todoapp.data
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.todoapp.model.User
+import com.example.todoapp.model.Note
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface UserDao {
+interface NoteDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addUser(user: User)
+    suspend fun addNote(note: Note)
 
     @Update
-    suspend fun updateUser(user: User)
+    suspend fun updateNote(note: Note)
 
     @Delete
-    suspend fun deleteUser(user: User)
+    suspend fun deleteNote(note: Note)
 
-    @Query("SELECT * FROM user_table ORDER BY id ASC")
-    fun readAllData(): Flow<List<User>>
+    @Query("SELECT * FROM note_table ORDER BY reminder DESC")
+    fun readAllData(): Flow<List<Note>>
 
-    @Query("DELETE FROM user_table")
-    suspend fun deleteAllUsers()
+    @Query("DELETE FROM note_table")
+    suspend fun deleteAllNotes()
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun update(userList: List<User>)
+    suspend fun update(noteList: List<Note>)
 
+    @Query("SELECT * FROM note_table WHERE subject LIKE :searchQuery OR description LIKE :searchQuery")
+    fun searchDatabase(searchQuery: String): Flow<List<Note>>
 
-    @Query("SELECT * FROM user_table WHERE subject LIKE :searchQuery OR description LIKE :searchQuery")
-    fun searchDatabase(searchQuery: String): Flow<List<User>>
+    @Query("select * from note_table where id= :id")
+    fun getNoteById(id: Int) : Note
+
 
 }

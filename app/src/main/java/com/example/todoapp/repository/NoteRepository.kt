@@ -1,34 +1,38 @@
 package com.example.todoapp.repository
 
-import com.example.todoapp.data.UserDao
-import com.example.todoapp.model.User
+import com.example.todoapp.data.NoteDao
+import com.example.todoapp.model.Note
 import kotlinx.coroutines.flow.Flow
 
-class UserRepository(private val userDao: UserDao) {
+class NoteRepository(private val noteDao: NoteDao) {
 
-    val readAllData: Flow<List<User>> = userDao.readAllData()
+    val readAllData: Flow<List<Note>> = noteDao.readAllData()
 
-    suspend fun addUser(user: User){
-        userDao.addUser(user)
+    suspend fun addNote(note: Note){
+        noteDao.addNote(note)
     }
 
-    suspend fun updateUser(user: User){
-        userDao.updateUser(user)
+    suspend fun updateNote(note: Note){
+        noteDao.updateNote(note)
     }
 
-    suspend fun deleteUser(user: User){
-        userDao.deleteUser(user)
+    suspend fun deleteNote(note: Note){
+        noteDao.deleteNote(note)
     }
 
-    suspend fun deleteAllUsers(){
-        userDao.deleteAllUsers()
+    suspend fun deleteAllNotes(){
+        noteDao.deleteAllNotes()
     }
 
-    suspend fun update(userList: List<User>){
-        userDao.update(userList)
+    suspend fun update(noteList: List<Note>){
+        noteDao.update(noteList)
     }
 
-    fun searchDatabase(searchQuery: String): Flow<List<User>>{
-        return userDao.searchDatabase(searchQuery)
+    fun searchDatabase(searchQuery: String): Flow<List<Note>>{
+        return noteDao.searchDatabase(searchQuery)
+    }
+
+    fun getNoteById(id: Int): Note{
+        return noteDao.getNoteById(id)
     }
 }
